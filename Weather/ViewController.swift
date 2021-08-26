@@ -15,6 +15,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
     
     let locationManager = CLLocationManager()
     var currentLocation: CLLocation?
+    var currentWeather: CurrentWeather?
+    var currentTemp: Temp?
+    var locationTitle: String?
     
     
     override func viewDidLoad() {
@@ -76,13 +79,57 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
             
             let entries = result.daily
             self.models.append(contentsOf: entries)
+
+            self.currentWeather = result.current
+            self.locationTitle = result.timezone
+            self.currentTemp = result.daily[0].temp
             
             // update UI
             DispatchQueue.main.async {
                 self.tableview.reloadData()
+                
+                self.tableview.tableHeaderView = self.createHeader()
             }
             
         }.resume()
+    }
+    
+    func createHeader() -> UIView {
+        let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width))
+        
+        let temperature = UILabel(frame: CGRect(x: 0, y: header.frame.height / 2 - 40, width: view.frame.width, height: 80))
+        let summary = UILabel(frame: CGRect(x: 0, y: header.frame.height / 2 - 80, width: view.frame.width, height: 40))
+        let location = UILabel(frame: CGRect(x: 0, y: header.frame.height / 2 - 140, width: view.frame.width, height: 60))
+        let minMaxTemp = UILabel(frame: CGRect(x: 0, y: header.frame.height / 2 + 40, width: view.frame.width, height: 40))
+        
+        header.addSubview(location)
+        header.addSubview(summary)
+        header.addSubview(temperature)
+        header.addSubview(minMaxTemp)
+        
+        location.textAlignment = .center
+        location.font = UIFont.systemFont(ofSize: 50, weight: .light)
+        
+        summary.textAlignment = .center
+        summary.font = UIFont.systemFont(ofSize: 20, weight: .regular)
+        
+        temperature.textAlignment = .center
+        temperature.font = UIFont.systemFont(ofSize: 100, weight: .light)
+        
+        minMaxTemp.textAlignment = .center
+        minMaxTemp.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+                
+        location.text = locationTitle
+        summary.text = currentWeather?.weather[0].description.capitalized
+        
+        let temp = Int(currentWeather?.temp ?? 0)
+        temperature.text = "\(temp)°"
+        
+        let minTemp = Int(currentTemp?.min ?? 0)
+        let maxTemp = Int(currentTemp?.max ?? 0)
+        minMaxTemp.text = "Max. \(maxTemp)°, min. \(minTemp)°"
+        
+        return header
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
