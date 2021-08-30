@@ -17,6 +17,11 @@ class WeatherTableViewCell: UITableViewCell {
     @IBOutlet var minTempLabel: UILabel!
     @IBOutlet var iconImageView: UIImageView!
    
+    @IBOutlet var humidityLabel: UILabel!
+    @IBOutlet var cloudsLabel: UILabel!
+    @IBOutlet var pressureLabel: UILabel!
+    @IBOutlet var windSpeedLabel: UILabel!
+    
     var viewFlipped = false
 
     override func awakeFromNib() {
@@ -34,10 +39,17 @@ class WeatherTableViewCell: UITableViewCell {
     }
     
     func configure(with model: ViewController.DailyWeather) {
+        // front cell view (normalView)
         self.minTempLabel.text = "\(Int(model.temp.min))°"
         self.maxTempLabel.text = "\(Int(model.temp.max))°"
         self.dayLabel.text = getDayForDate(Date(timeIntervalSince1970: Double(model.dt)))
         guard let weatherIcon = model.weather.first?.main else { return }
+        
+        // back cell view (flipView)
+        self.humidityLabel.text = "Humidity: \(model.humidity)%"
+        self.cloudsLabel.text = "Cloudiness: \(model.clouds)%"
+        self.pressureLabel.text = "Pressure: \(model.pressure) hPa"
+        self.windSpeedLabel.text = "Wind speed:\(model.wind_speed) m/s"
         
         // dark mode support
         let dynamicColor = UIColor { (traitCollection: UITraitCollection) -> UIColor in
