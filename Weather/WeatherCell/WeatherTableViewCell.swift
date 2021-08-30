@@ -39,18 +39,6 @@ class WeatherTableViewCell: UITableViewCell {
     }
     
     func configure(with model: ViewController.DailyWeather) {
-        // front cell view (normalView)
-        self.minTempLabel.text = "\(Int(model.temp.min))°"
-        self.maxTempLabel.text = "\(Int(model.temp.max))°"
-        self.dayLabel.text = getDayForDate(Date(timeIntervalSince1970: Double(model.dt)))
-        guard let weatherIcon = model.weather.first?.main else { return }
-        
-        // back cell view (flipView)
-        self.humidityLabel.text = "Humidity: \(model.humidity)%"
-        self.cloudsLabel.text = "Cloudiness: \(model.clouds)%"
-        self.pressureLabel.text = "Pressure: \(model.pressure) hPa"
-        self.windSpeedLabel.text = "Wind speed:\(model.wind_speed) m/s"
-        
         // dark mode support
         let dynamicColor = UIColor { (traitCollection: UITraitCollection) -> UIColor in
             switch traitCollection.userInterfaceStyle {
@@ -62,8 +50,41 @@ class WeatherTableViewCell: UITableViewCell {
                 return .black
             }
         }
+        
+        // front cell view (normalView)
+        self.minTempLabel.text = "\(Int(model.temp.min))°"
+        self.maxTempLabel.text = "\(Int(model.temp.max))°"
+        self.dayLabel.text = getDayForDate(Date(timeIntervalSince1970: Double(model.dt)))
+        guard let weatherIcon = model.weather.first?.main else { return }
         self.iconImageView.image = UIImage(named: weatherIcon)?.withTintColor(dynamicColor)
         self.iconImageView.contentMode = .scaleAspectFit
+        
+        // back cell labels with SF symbols
+        let humidityIcon = NSTextAttachment()
+        humidityIcon.image = UIImage(systemName: "drop")?.withTintColor(dynamicColor)
+        let humidityString = NSMutableAttributedString(attachment: humidityIcon)
+        humidityString.append(NSAttributedString(string: " Humidity: \(model.humidity)%"))
+        
+        let cloudsIcon = NSTextAttachment()
+        cloudsIcon.image = UIImage(systemName: "cloud")?.withTintColor(dynamicColor)
+        let cloudsString = NSMutableAttributedString(attachment: cloudsIcon)
+        cloudsString.append(NSAttributedString(string: " Cloudiness: \(model.clouds)%"))
+        
+        let pressureIcon = NSTextAttachment()
+        pressureIcon.image = UIImage(systemName: "thermometer")?.withTintColor(dynamicColor)
+        let pressureString = NSMutableAttributedString(attachment: pressureIcon)
+        pressureString.append(NSAttributedString(string: " Pressure: \(model.pressure) hPa"))
+        
+        let windIcon = NSTextAttachment()
+        windIcon.image = UIImage(systemName: "wind")?.withTintColor(dynamicColor)
+        let windString = NSMutableAttributedString(attachment: windIcon)
+        windString.append(NSAttributedString(string: " Wind speed:\(model.wind_speed) m/s"))
+        
+        // back cell view (flipView)
+        self.humidityLabel.attributedText = humidityString
+        self.cloudsLabel.attributedText = cloudsString
+        self.pressureLabel.attributedText = pressureString
+        self.windSpeedLabel.attributedText = windString
     }
     
     func getDayForDate(_ date: Date?) -> String {
