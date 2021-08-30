@@ -50,6 +50,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
             currentLocation = locations.first
             locationManager.stopUpdatingLocation()
             weatherRequest()
+        } else {
+            print("No location found")
         }
     }
     
@@ -67,19 +69,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
                 return
             }
             
-            var json: WeatherResponse?
+            var weatherResponse: WeatherResponse?
             do {
-                json = try JSONDecoder().decode(WeatherResponse.self, from: data)
+                weatherResponse = try JSONDecoder().decode(WeatherResponse.self, from: data)
             }
             catch {
                 print("error: \(error)")
             }
             
-            guard let result = json else { return }
+            guard let result = weatherResponse else { return }
             
             let entries = result.daily
             self.models.append(contentsOf: entries)
-
+            
             self.currentWeather = result.current
             self.locationTitle = result.timezone
             self.currentTemp = result.daily[0].temp
@@ -118,8 +120,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         
         minMaxTemp.textAlignment = .center
         minMaxTemp.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-                
-        location.text = locationTitle
+        
+        let cityName = locationTitle?.components(separatedBy: "/")[1]
+        location.text = cityName?.replacingOccurrences(of: "_", with: " ")
+        
         summary.text = currentWeather?.weather[0].description.capitalized
         
         let temp = Int(currentWeather?.temp ?? 0)
@@ -146,6 +150,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         return 80
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableview.cellForRow(at: indexPath) as! WeatherTableViewCell
+        cell.flipCell()
+    }
+    
     struct WeatherResponse: Codable {
         let lat: Float
         let lon: Float
@@ -169,7 +178,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         let visibility: Int
         let wind_speed: Double
         let wind_deg: Int
-//        let wind_gust: Double
+        //        let wind_gust: Double
         let weather: [Weather]
     }
     
@@ -185,7 +194,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         let visibility: Int
         let wind_speed: Double
         let wind_deg: Int
-//        let wind_gust: Double
+        //        let wind_gust: Double
         let weather: [Weather]
     }
     
@@ -203,7 +212,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         let dew_point: Double
         let wind_speed: Double
         let wind_deg: Int
-//        let wind_gust: Double
+        //        let wind_gust: Double
         let weather: [Weather]
         let clouds: Int
         let uvi: Double

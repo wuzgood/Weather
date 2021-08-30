@@ -9,11 +9,16 @@ import UIKit
 
 class WeatherTableViewCell: UITableViewCell {
     
+    @IBOutlet var normalView: UIView!
+    @IBOutlet var flipView: UIView!
+    
     @IBOutlet var dayLabel: UILabel!
     @IBOutlet var maxTempLabel: UILabel!
     @IBOutlet var minTempLabel: UILabel!
     @IBOutlet var iconImageView: UIImageView!
-    
+   
+    var viewFlipped = false
+
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -54,5 +59,21 @@ class WeatherTableViewCell: UITableViewCell {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE"
         return formatter.string(from: date)
+    }
+    
+    func flipCell() {
+        if viewFlipped {
+            viewFlipped.toggle()
+            UIView.transition(with: contentView, duration: 0.6, options: .transitionFlipFromTop) {
+                self.contentView.insertSubview(self.normalView, aboveSubview: self.flipView)
+            } completion: { _ in
+            }
+        } else {
+            viewFlipped.toggle()
+            UIView.transition(with: contentView, duration: 0.6, options: .transitionFlipFromBottom) {
+                self.contentView.insertSubview(self.flipView, aboveSubview: self.normalView)
+            } completion: { _ in
+            }
+        }
     }
 }
