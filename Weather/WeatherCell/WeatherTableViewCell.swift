@@ -94,18 +94,31 @@ class WeatherTableViewCell: UITableViewCell {
         return formatter.string(from: date)
     }
     
+    func flipToNormalView() {
+        viewFlipped.toggle()
+        UIView.transition(with: contentView, duration: 0.6, options: .transitionFlipFromTop) {
+            self.contentView.insertSubview(self.normalView, aboveSubview: self.flipView)
+        } completion: { _ in
+        }
+    }
+    
+    func autoFlip() {
+        if viewFlipped {
+            flipToNormalView()
+        }
+    }
+    
     func flipCell() {
         if viewFlipped {
-            viewFlipped.toggle()
-            UIView.transition(with: contentView, duration: 0.6, options: .transitionFlipFromTop) {
-                self.contentView.insertSubview(self.normalView, aboveSubview: self.flipView)
-            } completion: { _ in
-            }
+            flipToNormalView()
         } else {
             viewFlipped.toggle()
             UIView.transition(with: contentView, duration: 0.6, options: .transitionFlipFromBottom) {
                 self.contentView.insertSubview(self.flipView, aboveSubview: self.normalView)
             } completion: { _ in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
+                    self.autoFlip()
+                }
             }
         }
     }
