@@ -12,6 +12,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
     @IBOutlet var tableview: UITableView!
     
     var models = [DailyWeather]()
+    var hourlyModels = [HourlyWeather]()
     
     let locationManager = CLLocationManager()
     var currentLocation: CLLocation?
@@ -24,7 +25,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         super.viewDidLoad()
         
         // register 2 cells
-        tableview.register(HourTableViewCell.nib(), forCellReuseIdentifier: HourTableViewCell.identifier)
+        tableview.register(HourlyTableViewCell.nib(), forCellReuseIdentifier: HourlyTableViewCell.identifier)
         tableview.register(WeatherTableViewCell.nib(), forCellReuseIdentifier: WeatherTableViewCell.identifier)
         
         tableview.delegate = self
@@ -79,12 +80,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
             
             guard let result = weatherResponse else { return }
             
-            let entries = result.daily
+            var entries = result.daily
+            // removing current day from daily weather forecast
+            entries.remove(at: 0)
             self.models.append(contentsOf: entries)
             
             self.currentWeather = result.current
             self.locationTitle = result.timezone
             self.currentTemp = result.daily[0].temp
+            
+            self.hourlyModels = result.hourly
             
             // update UI
             DispatchQueue.main.async {
@@ -121,6 +126,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         minMaxTemp.textAlignment = .center
         minMaxTemp.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         
+        // cutting region name from location title: Europe/Kiev -> Kiev
         let cityName = locationTitle?.components(separatedBy: "/")[1]
         location.text = cityName?.replacingOccurrences(of: "_", with: " ")
         
@@ -136,11 +142,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         return header
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return 1
+        }
+        
         return models.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: HourlyTableViewCell.identifier, for: indexPath) as! HourlyTableViewCell
+                    cell.configure(with: hourlyModels)
+                    return cell
+                }
+        // daily weather cells
         let cell = tableview.dequeueReusableCell(withIdentifier: WeatherTableViewCell.identifier, for: indexPath) as! WeatherTableViewCell
         cell.configure(with: models[indexPath.row])
         return cell
