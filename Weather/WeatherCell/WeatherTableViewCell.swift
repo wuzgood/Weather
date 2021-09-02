@@ -16,14 +16,14 @@ class WeatherTableViewCell: UITableViewCell {
     @IBOutlet var maxTempLabel: UILabel!
     @IBOutlet var minTempLabel: UILabel!
     @IBOutlet var iconImageView: UIImageView!
-   
+    
     @IBOutlet var humidityLabel: UILabel!
     @IBOutlet var cloudsLabel: UILabel!
     @IBOutlet var pressureLabel: UILabel!
     @IBOutlet var windSpeedLabel: UILabel!
     
     var viewFlipped = false
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -105,6 +105,8 @@ class WeatherTableViewCell: UITableViewCell {
     func autoFlip() {
         if viewFlipped {
             flipToNormalView()
+        } else {
+            return
         }
     }
     

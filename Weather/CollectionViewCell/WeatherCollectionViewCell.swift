@@ -10,6 +10,7 @@ import UIKit
 class WeatherCollectionViewCell: UICollectionViewCell {
     @IBOutlet var iconImageView: UIImageView!
     @IBOutlet var tempLabel: UILabel!
+    @IBOutlet var hourLabel: UILabel!
     
     static let identifier = "WeatherCollectionViewCell"
     
@@ -35,11 +36,19 @@ class WeatherCollectionViewCell: UICollectionViewCell {
             }
         }
         
-        // TODO: - Исправить размеры iconImageView
-        self.tempLabel.text = "\(model.temp)"
+        self.tempLabel.text = " \(Int(model.temp))°"
         guard let weatherIcon = model.weather.first?.main else { return }
         self.iconImageView.image = UIImage(named: weatherIcon)?.withTintColor(dynamicColor)
         self.iconImageView.contentMode = .scaleAspectFit
+        self.hourLabel.text = getDayForDate(Date(timeIntervalSince1970: Double(model.dt)))
+
+    }
+    
+    func getDayForDate(_ date: Date?) -> String {
+        guard let date = date else { return ""}
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH"
+        return formatter.string(from: date)
     }
 
 }

@@ -90,6 +90,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
             self.currentTemp = result.daily[0].temp
             
             self.hourlyModels = result.hourly
+            self.hourlyModels.removeSubrange(25...self.hourlyModels.count-1)
             
             // update UI
             DispatchQueue.main.async {
@@ -102,12 +103,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
     }
     
     func createHeader() -> UIView {
-        let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width))
+        let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width - 60))
         
         let temperature = UILabel(frame: CGRect(x: 0, y: header.frame.height / 2 - 40, width: view.frame.width, height: 80))
-        let summary = UILabel(frame: CGRect(x: 0, y: header.frame.height / 2 - 80, width: view.frame.width, height: 40))
+        let summary = UILabel(frame: CGRect(x: 0, y: header.frame.height / 2 - 85, width: view.frame.width, height: 40))
         let location = UILabel(frame: CGRect(x: 0, y: header.frame.height / 2 - 140, width: view.frame.width, height: 60))
-        let minMaxTemp = UILabel(frame: CGRect(x: 0, y: header.frame.height / 2 + 40, width: view.frame.width, height: 40))
+        let minMaxTemp = UILabel(frame: CGRect(x: 0, y: header.frame.height / 2 + 50, width: view.frame.width, height: 40))
         
         header.addSubview(location)
         header.addSubview(summary)
@@ -133,7 +134,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         summary.text = currentWeather?.weather[0].description.capitalized
         
         let temp = Int(currentWeather?.temp ?? 0)
-        temperature.text = "\(temp)°"
+        temperature.text = " \(temp)°"
         
         let minTemp = Int(currentTemp?.min ?? 0)
         let maxTemp = Int(currentTemp?.max ?? 0)
@@ -154,12 +155,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         return models.count
     }
     
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return CGFloat.leastNormalMagnitude
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return CGFloat.leastNormalMagnitude
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: HourlyTableViewCell.identifier, for: indexPath) as! HourlyTableViewCell
-                    cell.configure(with: hourlyModels)
-                    return cell
-                }
+            let cell = tableView.dequeueReusableCell(withIdentifier: HourlyTableViewCell.identifier, for: indexPath) as! HourlyTableViewCell
+            cell.configure(with: hourlyModels)
+            return cell
+        }
         // daily weather cells
         let cell = tableview.dequeueReusableCell(withIdentifier: WeatherTableViewCell.identifier, for: indexPath) as! WeatherTableViewCell
         cell.configure(with: models[indexPath.row])
@@ -167,12 +176,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 120
+        }
         return 80
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableview.cellForRow(at: indexPath) as! WeatherTableViewCell
-        cell.flipCell()
+        if let cell = tableview.cellForRow(at: indexPath) as? WeatherTableViewCell {
+            cell.flipCell()
+        }
     }
     
     struct WeatherResponse: Codable {
