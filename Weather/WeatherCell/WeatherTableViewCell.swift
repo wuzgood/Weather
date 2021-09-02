@@ -38,7 +38,7 @@ class WeatherTableViewCell: UITableViewCell {
         return UINib(nibName: "WeatherTableViewCell", bundle: nil)
     }
     
-    func configure(with model: ViewController.DailyWeather) {
+    func configure(with model: DailyWeather) {
         // dark mode support
         let dynamicColor = UIColor { (traitCollection: UITraitCollection) -> UIColor in
             switch traitCollection.userInterfaceStyle {

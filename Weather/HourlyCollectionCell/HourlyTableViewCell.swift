@@ -10,7 +10,7 @@ import UIKit
 class HourlyTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet var collectionView: UICollectionView!
-    var models = [ViewController.HourlyWeather]()
+    var models = [HourlyWeather]()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -29,7 +29,7 @@ class HourlyTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollecti
         return UINib(nibName: "HourlyTableViewCell", bundle: nil)
     }
     
-    func configure(with models: [ViewController.HourlyWeather]) {
+    func configure(with models: [HourlyWeather]) {
         self.models = models
         collectionView.reloadData()
     }

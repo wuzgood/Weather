@@ -20,10 +20,9 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
     
-    func configure(with model: ViewController.HourlyWeather) {
+    func configure(with model: HourlyWeather) {
         // dark mode support
         let dynamicColor = UIColor { (traitCollection: UITraitCollection) -> UIColor in
             switch traitCollection.userInterfaceStyle {
