@@ -24,6 +24,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     
     func configure(with model: HourlyWeather) {
         // dark mode support
+        /*
         let dynamicColor = UIColor { (traitCollection: UITraitCollection) -> UIColor in
             switch traitCollection.userInterfaceStyle {
             case .light, .unspecified:
@@ -33,11 +34,14 @@ class WeatherCollectionViewCell: UICollectionViewCell {
             @unknown default:
                 return .black
             }
+         
         }
-        
+        */
         self.tempLabel.text = " \(Int(model.temp))°"
         guard let weatherIcon = model.weather.first?.main else { return }
-        self.iconImageView.image = UIImage(named: weatherIcon)?.withTintColor(dynamicColor)
+        self.iconImageView.image = UIImage(named: weatherIcon)
+
+//        self.iconImageView.image = UIImage(named: weatherIcon)?.withTintColor(dynamicColor)
         self.iconImageView.contentMode = .scaleAspectFit
         self.hourLabel.text = getDayForDate(Date(timeIntervalSince1970: Double(model.dt)))
 
