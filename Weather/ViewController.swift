@@ -38,7 +38,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        setGradient()
+        let gradient = GradientBackground()
+        gradient.setup(vc: self)
         
         getLocation()
         
@@ -194,24 +195,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         if let cell = tableview.cellForRow(at: indexPath) as? WeatherTableViewCell {
             cell.flipCell()
         }
-    }
-    
-    func setGradient() {
-        let gradientLayer = CAGradientLayer()
-
-        let color1 = CGColor(red: 229/255, green: 147/255, blue: 91/255, alpha: 1)
-        let color2 = CGColor(red: 210/255, green: 133/255, blue: 70/255, alpha: 1)
-        let color3 = CGColor(red: 219/255, green: 103/255, blue: 53/255, alpha: 1)
-        
-        let colors = [color1, color2, color3]
-//        let colorsArray = [UIColor.yellow.cgColor, UIColor.magenta.cgColor]
-        
-        let viewLayer = self.view.layer
-        
-        gradientLayer.colors = colors
-        gradientLayer.frame = viewLayer.bounds
-        
-        viewLayer.insertSublayer(gradientLayer, at: 0)
     }
 }
 

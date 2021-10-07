@@ -110,12 +110,14 @@ class WeatherTableViewCell: UITableViewCell {
     
     func flipToNormalView() {
         viewFlipped.toggle()
+        self.isUserInteractionEnabled = false
         UIView.transition(with: contentView, duration: 0.6, options: .transitionFlipFromTop) {
 //            self.isHidden.toggle()
             self.contentView.insertSubview(self.normalView, aboveSubview: self.flipView)
             self.normalView.isHidden = false
             self.flipView.isHidden = true
         } completion: { _ in
+            self.isUserInteractionEnabled = true
         }
     }
     
@@ -132,11 +134,16 @@ class WeatherTableViewCell: UITableViewCell {
             flipToNormalView()
         } else {
             viewFlipped.toggle()
+            
+            self.isUserInteractionEnabled = false
+
             UIView.transition(with: contentView, duration: 0.6, options: .transitionFlipFromBottom) {
                 self.contentView.insertSubview(self.flipView, aboveSubview: self.normalView)
                 self.flipView.isHidden = false
                 self.normalView.isHidden = true
             } completion: { _ in
+                self.isUserInteractionEnabled = true
+
                 DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
                     self.autoFlip()
                 }
