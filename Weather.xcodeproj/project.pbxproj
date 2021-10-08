@@ -18,11 +18,12 @@
 		CF50A14A26CE958800A1A784 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF50A14826CE958800A1A784 /* Main.storyboard */; };
 		CF50A14C26CE958900A1A784 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF50A14B26CE958900A1A784 /* Assets.xcassets */; };
 		CF50A14F26CE958900A1A784 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF50A14D26CE958900A1A784 /* LaunchScreen.storyboard */; };
+		CF9BCDC627106283005A67CF /* ViewController+Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9BCDC527106283005A67CF /* ViewController+Header.swift */; };
 		CFA932CD270F605D00A79F89 /* GradientBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA932CC270F605D00A79F89 /* GradientBackground.swift */; };
 		CFB2D22B26CFD398002DB7E7 /* WeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB2D22926CFD398002DB7E7 /* WeatherTableViewCell.swift */; };
 		CFB2D22C26CFD398002DB7E7 /* WeatherTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CFB2D22A26CFD398002DB7E7 /* WeatherTableViewCell.xib */; };
 		CFBE12FE27105A4700954D98 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBE12FD27105A4700954D98 /* Model.swift */; };
-		CFBE130027105C3700954D98 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBE12FF27105C3700954D98 /* Location.swift */; };
+		CFBE130027105C3700954D98 /* ViewController+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBE12FF27105C3700954D98 /* ViewController+Location.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,12 +40,14 @@
 		CF50A14B26CE958900A1A784 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CF50A14E26CE958900A1A784 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CF50A15026CE958900A1A784 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CF9BCDC527106283005A67CF /* ViewController+Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Header.swift"; sourceTree = "<group>"; };
+		CF9BCDC7271064A0005A67CF /* Euro Tour.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Euro Tour.gpx"; sourceTree = "<group>"; };
 		CFA932CC270F605D00A79F89 /* GradientBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackground.swift; sourceTree = "<group>"; };
 		CFB2D22926CFD398002DB7E7 /* WeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCell.swift; sourceTree = "<group>"; };
 		CFB2D22A26CFD398002DB7E7 /* WeatherTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WeatherTableViewCell.xib; sourceTree = "<group>"; };
 		CFBE12FC2710501900954D98 /* Kyiv Walk.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Kyiv Walk.gpx"; sourceTree = "<group>"; };
 		CFBE12FD27105A4700954D98 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
-		CFBE12FF27105C3700954D98 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		CFBE12FF27105C3700954D98 /* ViewController+Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Location.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,7 +82,6 @@
 		CF50A13626CE958800A1A784 = {
 			isa = PBXGroup;
 			children = (
-				CFBE12FF27105C3700954D98 /* Location.swift */,
 				CF50A14126CE958800A1A784 /* Weather */,
 				CF50A14026CE958800A1A784 /* Products */,
 			);
@@ -104,11 +106,14 @@
 				CF1A854026E17110003FBDB9 /* WeatherStructs.swift */,
 				CFBE12FD27105A4700954D98 /* Model.swift */,
 				CFA932CC270F605D00A79F89 /* GradientBackground.swift */,
+				CFBE12FF27105C3700954D98 /* ViewController+Location.swift */,
+				CF9BCDC527106283005A67CF /* ViewController+Header.swift */,
 				CF50A14626CE958800A1A784 /* ViewController.swift */,
 				CF50A14826CE958800A1A784 /* Main.storyboard */,
 				CF50A14B26CE958900A1A784 /* Assets.xcassets */,
 				CF50A14D26CE958900A1A784 /* LaunchScreen.storyboard */,
 				CF50A15026CE958900A1A784 /* Info.plist */,
+				CF9BCDC7271064A0005A67CF /* Euro Tour.gpx */,
 				CFBE12FC2710501900954D98 /* Kyiv Walk.gpx */,
 			);
 			path = Weather;
@@ -198,10 +203,11 @@
 			files = (
 				CFBE12FE27105A4700954D98 /* Model.swift in Sources */,
 				CFB2D22B26CFD398002DB7E7 /* WeatherTableViewCell.swift in Sources */,
-				CFBE130027105C3700954D98 /* Location.swift in Sources */,
+				CFBE130027105C3700954D98 /* ViewController+Location.swift in Sources */,
 				CFA932CD270F605D00A79F89 /* GradientBackground.swift in Sources */,
 				CF1A854126E17110003FBDB9 /* WeatherStructs.swift in Sources */,
 				CF50A14726CE958800A1A784 /* ViewController.swift in Sources */,
+				CF9BCDC627106283005A67CF /* ViewController+Header.swift in Sources */,
 				CF11FD6626DFD2CC0062A13C /* WeatherCollectionViewCell.swift in Sources */,
 				CF50A14326CE958800A1A784 /* AppDelegate.swift in Sources */,
 				CF11FD6B26DFD45B0062A13C /* HourlyTableViewCell.swift in Sources */,

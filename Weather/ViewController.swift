@@ -8,16 +8,18 @@
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableview: UITableView!
-    var model = Model()
-    
+    var model = Model()    
     let locationManager = CLLocationManager()
     var currentLocation: CLLocation?
         
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setup()
+
         tableview.register(HourlyTableViewCell.nib(), forCellReuseIdentifier: HourlyTableViewCell.identifier)
         tableview.register(WeatherTableViewCell.nib(), forCellReuseIdentifier: WeatherTableViewCell.identifier)
         
@@ -25,138 +27,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         tableview.dataSource = self
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        getLocation()
-    }
-    
-    func getLocation() {
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if !locations.isEmpty {
-            currentLocation = locations.first
-            weatherRequest()
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("⚠️")
-        print(error.localizedDescription)
-    }
-    
-    func presentNoLocationAlert() {
-        let ac = UIAlertController(title: "No location found", message: "Check your internet connection or location access.", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        ac.addAction(UIAlertAction(title: "Try again", style: .default, handler: { [weak self]_ in
-            ac.dismiss(animated: true)
-            self?.getLocation()
-            
-            if self?.model.locationTitle == nil {
-                self?.presentNoLocationAlert()
-            }
-        }))
-        present(ac, animated: true)
-    }
-    
-    func weatherRequest() {
-        guard let currentLocation = currentLocation else { return }
-        
-        let lon = currentLocation.coordinate.longitude
-        let lat = currentLocation.coordinate.latitude
-        
-        let url = "https://api.openweathermap.org/data/2.5/onecall?lat=\(lat)&lon=\(lon)&exclude=minutely&units=metric&appid=6ca4091b1be6cd9905e8e10ec4667e63"
-        
-        URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
-            guard let data = data, error == nil else {
-                print("a problem occured")
-                return
-            }
-            
-            var weatherResponse: WeatherResponse?
-            do {
-                weatherResponse = try JSONDecoder().decode(WeatherResponse.self, from: data)
-            }
-            catch {
-                print("error: \(error)")
-            }
-            
-            guard let result = weatherResponse else { return }
-            
-            var entries = result.daily
-            // removing current day from daily weather forecast
-            entries.remove(at: 0)
-            
-            if self.model.daily.isEmpty {
-                self.model.daily.append(contentsOf: entries)
-            }
-            
-            self.model.currentWeather = result.current
-            self.model.locationTitle = result.timezone
-            self.model.currentTemp = result.daily[0].temp
-            
-            self.model.hourly = result.hourly
-            self.model.hourly.removeSubrange(25...self.model.hourly.count-1)
-            
-            // update UI
-            DispatchQueue.main.async {
-                self.tableview.reloadData()
-                
-                self.tableview.tableHeaderView = self.createHeader()
-                
-                let gradient = GradientBackground()
-                gradient.setup(vc: self)
-            }
-            
-        }.resume()
-    }
-    
-    func createHeader() -> UIView {
-        let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.width - 60))
-        
-        let temperature = UILabel(frame: CGRect(x: 0, y: header.frame.height / 2 - 40, width: view.frame.width, height: 80))
-        let summary = UILabel(frame: CGRect(x: 0, y: header.frame.height / 2 - 85, width: view.frame.width, height: 40))
-        let location = UILabel(frame: CGRect(x: 0, y: header.frame.height / 2 - 140, width: view.frame.width, height: 60))
-        let minMaxTemp = UILabel(frame: CGRect(x: 0, y: header.frame.height / 2 + 50, width: view.frame.width, height: 40))
-        
-        header.addSubview(location)
-        header.addSubview(summary)
-        header.addSubview(temperature)
-        header.addSubview(minMaxTemp)
-        
-        location.textAlignment = .center
-        location.font = UIFont.systemFont(ofSize: 50, weight: .light)
-        
-        summary.textAlignment = .center
-        summary.font = UIFont.systemFont(ofSize: 20, weight: .regular)
-        
-        temperature.textAlignment = .center
-        temperature.font = UIFont.systemFont(ofSize: 100, weight: .light)
-        
-        minMaxTemp.textAlignment = .center
-        minMaxTemp.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        
-        // cutting region name from location title: Europe/Kiev -> Kiev
-        let cityName = model.locationTitle?.components(separatedBy: "/")[1]
-        location.text = cityName?.replacingOccurrences(of: "_", with: " ")
-        
-        summary.text = model.currentWeather?.weather[0].description.capitalized
-        
-        let temp = Int(model.currentWeather?.temp ?? 0)
-        temperature.text = " \(temp)°"
-        
-        let minTemp = Int(model.currentTemp?.min ?? 0)
-        let maxTemp = Int(model.currentTemp?.max ?? 0)
-        minMaxTemp.text = "Max. \(maxTemp)°, min. \(minTemp)°"
-        
-        return header
-    }
-    
-    // MARK: - TableView
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
