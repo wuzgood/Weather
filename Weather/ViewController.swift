@@ -24,26 +24,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // register 2 cells
         tableview.register(HourlyTableViewCell.nib(), forCellReuseIdentifier: HourlyTableViewCell.identifier)
         tableview.register(WeatherTableViewCell.nib(), forCellReuseIdentifier: WeatherTableViewCell.identifier)
         
         tableview.delegate = self
         tableview.dataSource = self
-        
-        //        setGradient()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let gradient = GradientBackground()
-        gradient.setup(vc: self)
-        
         getLocation()
-        
-        //        setGradient()
     }
     
     func getLocation() {
@@ -53,13 +44,29 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if !locations.isEmpty && currentLocation == nil {
+        if !locations.isEmpty {
             currentLocation = locations.first
-            locationManager.stopUpdatingLocation()
             weatherRequest()
-        } else {
-            print("No location found")
         }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+//        models.removeAll()
+        presentNoLocationAlert()
+    }
+    
+    func presentNoLocationAlert() {
+        let ac = UIAlertController(title: "No location found", message: "Check your internet connection or location access.", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        ac.addAction(UIAlertAction(title: "Try again", style: .default, handler: { [weak self]_ in
+            ac.dismiss(animated: true)
+            self?.getLocation()
+            
+            if self?.locationTitle == nil {
+                self?.presentNoLocationAlert()
+            }
+        }))
+        present(ac, animated: true)
     }
     
     func weatherRequest() {
@@ -103,6 +110,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
                 self.tableview.reloadData()
                 
                 self.tableview.tableHeaderView = self.createHeader()
+                
+                let gradient = GradientBackground()
+                gradient.setup(vc: self)
             }
             
         }.resume()
@@ -149,6 +159,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         return header
     }
     
+    // MARK: - TableView
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -161,25 +173,27 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         return models.count
     }
     
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return CGFloat.leastNormalMagnitude
-    }
+    // Зазор
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return CGFloat.leastNormalMagnitude
-    }
+    //    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    //        return CGFloat.leastNormalMagnitude
+    //    }
+    //
+    //    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    //        return CGFloat.leastNormalMagnitude
+    //    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: HourlyTableViewCell.identifier, for: indexPath) as! HourlyTableViewCell
             cell.configure(with: hourlyModels)
-            cell.backgroundColor = .clear
+            cell.backgroundColor = UIColor(white: 1, alpha: 0.1)
             return cell
         }
         // daily weather cells
         let cell = tableview.dequeueReusableCell(withIdentifier: WeatherTableViewCell.identifier, for: indexPath) as! WeatherTableViewCell
         cell.configure(with: models[indexPath.row])
-        cell.backgroundColor = .clear
+        cell.backgroundColor = UIColor(white: 1, alpha: 0.1)
         
         return cell
     }
@@ -197,4 +211,3 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         }
     }
 }
-
