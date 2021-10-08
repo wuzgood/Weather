@@ -10,17 +10,11 @@ import CoreLocation
 
 class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableview: UITableView!
-    
-    var models = [DailyWeather]()
-    var hourlyModels = [HourlyWeather]()
+    var model = Model()
     
     let locationManager = CLLocationManager()
     var currentLocation: CLLocation?
-    var currentWeather: CurrentWeather?
-    var currentTemp: Temp?
-    var locationTitle: String?
-    
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -51,7 +45,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        presentNoLocationAlert()
+        print("⚠️")
         print(error.localizedDescription)
     }
     
@@ -62,7 +56,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
             ac.dismiss(animated: true)
             self?.getLocation()
             
-            if self?.locationTitle == nil {
+            if self?.model.locationTitle == nil {
                 self?.presentNoLocationAlert()
             }
         }))
@@ -97,16 +91,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
             // removing current day from daily weather forecast
             entries.remove(at: 0)
             
-            if self.models.isEmpty {
-                self.models.append(contentsOf: entries)
+            if self.model.daily.isEmpty {
+                self.model.daily.append(contentsOf: entries)
             }
             
-            self.currentWeather = result.current
-            self.locationTitle = result.timezone
-            self.currentTemp = result.daily[0].temp
+            self.model.currentWeather = result.current
+            self.model.locationTitle = result.timezone
+            self.model.currentTemp = result.daily[0].temp
             
-            self.hourlyModels = result.hourly
-            self.hourlyModels.removeSubrange(25...self.hourlyModels.count-1)
+            self.model.hourly = result.hourly
+            self.model.hourly.removeSubrange(25...self.model.hourly.count-1)
             
             // update UI
             DispatchQueue.main.async {
@@ -147,16 +141,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         minMaxTemp.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         
         // cutting region name from location title: Europe/Kiev -> Kiev
-        let cityName = locationTitle?.components(separatedBy: "/")[1]
+        let cityName = model.locationTitle?.components(separatedBy: "/")[1]
         location.text = cityName?.replacingOccurrences(of: "_", with: " ")
         
-        summary.text = currentWeather?.weather[0].description.capitalized
+        summary.text = model.currentWeather?.weather[0].description.capitalized
         
-        let temp = Int(currentWeather?.temp ?? 0)
+        let temp = Int(model.currentWeather?.temp ?? 0)
         temperature.text = " \(temp)°"
         
-        let minTemp = Int(currentTemp?.min ?? 0)
-        let maxTemp = Int(currentTemp?.max ?? 0)
+        let minTemp = Int(model.currentTemp?.min ?? 0)
+        let maxTemp = Int(model.currentTemp?.max ?? 0)
         minMaxTemp.text = "Max. \(maxTemp)°, min. \(minTemp)°"
         
         return header
@@ -173,7 +167,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
             return 1
         }
         
-        return models.count
+        return model.daily.count
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -187,13 +181,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: HourlyTableViewCell.identifier, for: indexPath) as! HourlyTableViewCell
-            cell.configure(with: hourlyModels)
+            cell.configure(with: model.hourly)
             cell.backgroundColor = UIColor(white: 1, alpha: 0.1)
             return cell
         }
         // daily weather cells
         let cell = tableview.dequeueReusableCell(withIdentifier: WeatherTableViewCell.identifier, for: indexPath) as! WeatherTableViewCell
-        cell.configure(with: models[indexPath.row])
+        cell.configure(with: model.daily[indexPath.row])
         cell.backgroundColor = UIColor(white: 1, alpha: 0.1)
         
         return cell
