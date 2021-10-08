@@ -51,8 +51,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-//        models.removeAll()
         presentNoLocationAlert()
+        print(error.localizedDescription)
     }
     
     func presentNoLocationAlert() {
@@ -96,7 +96,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
             var entries = result.daily
             // removing current day from daily weather forecast
             entries.remove(at: 0)
-            self.models.append(contentsOf: entries)
+            
+            if self.models.isEmpty {
+                self.models.append(contentsOf: entries)
+            }
             
             self.currentWeather = result.current
             self.locationTitle = result.timezone
@@ -173,15 +176,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITableViewDe
         return models.count
     }
     
-    // Зазор
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 5
+    }
     
-    //    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-    //        return CGFloat.leastNormalMagnitude
-    //    }
-    //
-    //    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-    //        return CGFloat.leastNormalMagnitude
-    //    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 5
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
