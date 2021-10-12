@@ -27,13 +27,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableview.delegate = self
         tableview.dataSource = self
     }
-    
-//    override func viewDidAppear(_ animated: Bool) {
-//        let gradient = GradientBackground()
-//        gradient.setup(vc: self)
-//    }
-    
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -42,7 +36,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if section == 0 {
             return 1
         }
-        
         return model.daily.count
     }
     

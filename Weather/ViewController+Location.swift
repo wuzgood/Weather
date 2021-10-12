@@ -57,7 +57,7 @@ extension ViewController: CLLocationManagerDelegate {
                 let formatter = DateFormatter()
                 formatter.timeStyle = .medium
                 let dateString = formatter.string(from: Date())
-
+                
                 print("\(dateString) Decoding successful")
                 
             }
@@ -73,7 +73,6 @@ extension ViewController: CLLocationManagerDelegate {
             
             if self.model.daily.isEmpty {
                 self.model.daily.append(contentsOf: entries)
-                self.locationManager.stopUpdatingLocation()
             }
             
             self.model.currentWeather = result.current
@@ -83,18 +82,17 @@ extension ViewController: CLLocationManagerDelegate {
             self.model.hourly = result.hourly
             self.model.hourly.removeSubrange(25...self.model.hourly.count-1)
             
-            let gradient = GradientBackground()
+//            let gradient = GradientBackground()
             let temperature = self.model.currentWeather?.temp
-
+            
             // update UI
             DispatchQueue.main.async {
                 self.tableview.reloadData()
                 
                 self.tableview.tableHeaderView = self.createHeader()
                 
-                gradient.setup(vc: self, temperature: temperature)
+                self.model.gradient.setup(vc: self, temperature: temperature)
             }
-            
         }.resume()
     }
 }
