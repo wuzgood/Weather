@@ -50,6 +50,8 @@
 		CFBE12FC2710501900954D98 /* Kyiv Walk.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Kyiv Walk.gpx"; sourceTree = "<group>"; };
 		CFBE12FD27105A4700954D98 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		CFBE12FF27105C3700954D98 /* ViewController+Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Location.swift"; sourceTree = "<group>"; };
+		CFE895AE27162A8A00B111FE /* America Tour.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "America Tour.gpx"; sourceTree = "<group>"; };
+		CFE895AF2716339000B111FE /* Los Angeles - Dallas - Monterey.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Los Angeles - Dallas - Monterey.gpx"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,8 @@
 		CF50A13626CE958800A1A784 = {
 			isa = PBXGroup;
 			children = (
+				CFE895AF2716339000B111FE /* Los Angeles - Dallas - Monterey.gpx */,
+				CFE895AE27162A8A00B111FE /* America Tour.gpx */,
 				CF50A14126CE958800A1A784 /* Weather */,
 				CF50A14026CE958800A1A784 /* Products */,
 			);

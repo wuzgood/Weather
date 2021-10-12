@@ -20,9 +20,9 @@ class GradientBackground {
             // calculate the hue color
             let gradientTemp = (temp + 30) * 4
             
-            let color1 = UIColor(hue: 1-((gradientTemp + 20)/255), saturation: 1, brightness: 1, alpha: 1).cgColor
-            let color2 = UIColor(hue: 1-((gradientTemp + 10)/255), saturation: 1, brightness: 1, alpha: 1).cgColor
-            let color3 = UIColor(hue: 1-(gradientTemp/255), saturation: 1, brightness: 1, alpha: 1).cgColor
+            let color1 = UIColor(hue: 1-((gradientTemp)/255), saturation: 0.6, brightness: 1, alpha: 1).cgColor
+            let color2 = UIColor(hue: 1-((gradientTemp - 8)/255), saturation: 0.6, brightness: 1, alpha: 1).cgColor
+            let color3 = UIColor(hue: 1-((gradientTemp - 16)/255), saturation: 0.6, brightness: 1, alpha: 1).cgColor
 
             let colors = [color1, color2, color3]
 

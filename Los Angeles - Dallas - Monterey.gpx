@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" version="1.1" creator="Open GPX Tracker for iOS">
+	<wpt lat="34.050117851286934" lon="-118.25820760071791">
+		<time>2021-10-12T21:18:54Z</time>
+		<name>00:18:54</name>
+		<desc>13 Oct 2021, 00:18:54</desc>
+	</wpt>
+	<wpt lat="40.74003145801632" lon="-112.01451466557431">
+		<time>2021-10-12T21:19:00Z</time>
+		<name>00:19:00</name>
+		<desc>13 Oct 2021, 00:19:00</desc>
+	</wpt>
+	<wpt lat="35.07994188780309" lon="-106.44522420150615">
+		<time>2021-10-12T21:19:07Z</time>
+		<name>00:19:07</name>
+		<desc>13 Oct 2021, 00:19:07</desc>
+	</wpt>
+	<wpt lat="32.77216180045754" lon="-96.94614771055238">
+		<time>2021-10-12T21:19:10Z</time>
+		<name>00:19:10</name>
+		<desc>13 Oct 2021, 00:19:10</desc>
+	</wpt>
+	<wpt lat="25.657412475964666" lon="-100.29333140724324">
+		<time>2021-10-12T21:19:14Z</time>
+		<name>00:19:14</name>
+		<desc>13 Oct 2021, 00:19:14</desc>
+	</wpt>
+	<trk>
+	</trk>
+</gpx>

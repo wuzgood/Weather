@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" version="1.1" creator="Open GPX Tracker for iOS">
+	<wpt lat="60.050806230199754" lon="-139.13467079327467">
+		<time>2021-10-12T20:40:38Z</time>
+		<name>23:40:38</name>
+		<desc>12 Oct 2021, 23:40:38</desc>
+	</wpt>
+	<wpt lat="49.07578653175778" lon="-122.74085367428343">
+		<time>2021-10-12T20:40:40Z</time>
+		<name>23:40:40</name>
+		<desc>12 Oct 2021, 23:40:40</desc>
+	</wpt>
+	<wpt lat="38.107476617550255" lon="-120.55916698544428">
+		<time>2021-10-12T20:40:44Z</time>
+		<name>23:40:44</name>
+		<desc>12 Oct 2021, 23:40:44</desc>
+	</wpt>
+	<wpt lat="34.33739498800074" lon="-118.31514639120971">
+		<time>2021-10-12T20:40:47Z</time>
+		<name>23:40:47</name>
+		<desc>12 Oct 2021, 23:40:47</desc>
+	</wpt>
+	<wpt lat="19.388015772044604" lon="-98.55529838086674">
+		<time>2021-10-12T20:40:52Z</time>
+		<name>23:40:52</name>
+		<desc>12 Oct 2021, 23:40:52</desc>
+	</wpt>
+	<wpt lat="4.306106517419476" lon="-74.1204074658684">
+		<time>2021-10-12T20:40:56Z</time>
+		<name>23:40:56</name>
+		<desc>12 Oct 2021, 23:40:56</desc>
+	</wpt>
+	<trk>
+	</trk>
+</gpx>

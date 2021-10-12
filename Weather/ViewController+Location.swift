@@ -14,7 +14,7 @@ extension ViewController: CLLocationManagerDelegate {
     func setup() {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-        locationManager.distanceFilter = 1000
+        locationManager.distanceFilter = 2000
         locationManager.startUpdatingLocation()
     }
     
@@ -47,19 +47,13 @@ extension ViewController: CLLocationManagerDelegate {
         
         URLSession.shared.dataTask(with: URL(string: url)!) { data, response, error in
             guard let data = data, error == nil else {
-                print("a problem occured")
+                print(error?.localizedDescription as Any)
                 return
             }
             
             var weatherResponse: WeatherResponse?
             do {
                 weatherResponse = try JSONDecoder().decode(WeatherResponse.self, from: data)
-                let formatter = DateFormatter()
-                formatter.timeStyle = .medium
-                let dateString = formatter.string(from: Date())
-                
-                print("\(dateString) Decoding successful")
-                
             }
             catch {
                 print("error: \(error)")
@@ -73,6 +67,9 @@ extension ViewController: CLLocationManagerDelegate {
             
             if self.model.daily.isEmpty {
                 self.model.daily.append(contentsOf: entries)
+            } else {
+                self.model.daily.removeAll()
+                self.model.daily.append(contentsOf: entries)
             }
             
             self.model.currentWeather = result.current
@@ -82,16 +79,15 @@ extension ViewController: CLLocationManagerDelegate {
             self.model.hourly = result.hourly
             self.model.hourly.removeSubrange(25...self.model.hourly.count-1)
             
-//            let gradient = GradientBackground()
             let temperature = self.model.currentWeather?.temp
             
             // update UI
             DispatchQueue.main.async {
+                self.model.gradient.setup(vc: self, temperature: temperature)
+
                 self.tableview.reloadData()
                 
-                self.tableview.tableHeaderView = self.createHeader()
-                
-                self.model.gradient.setup(vc: self, temperature: temperature)
+                self.tableview.tableHeaderView = self.createHeader()                
             }
         }.resume()
     }

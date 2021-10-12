@@ -15,7 +15,6 @@ struct Model {
     var currentTemp: Temp?
     var locationTitle: String?
     
-//    var isGradientSet = false
     let gradient = GradientBackground()
 
 }
