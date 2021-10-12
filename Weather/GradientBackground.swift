@@ -9,11 +9,16 @@ import Foundation
 import UIKit
 
 class GradientBackground {
-    func setup(vc: ViewController) {
+
+    func setup(vc: ViewController, temperature: Double?) {
+        if let temperature = temperature {
+            let temperature = Int(temperature)
+            print("🚫 \(temperature)")
+        }
+        
         let color1 = CGColor(red: 229/255, green: 147/255, blue: 91/255, alpha: 1)
         let color2 = CGColor(red: 210/255, green: 133/255, blue: 70/255, alpha: 1)
         let color3 = CGColor(red: 219/255, green: 103/255, blue: 53/255, alpha: 1)
-//        let color4 = UIColor(
         
         let colors = [color1, color2, color3]
         

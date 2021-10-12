@@ -83,14 +83,16 @@ extension ViewController: CLLocationManagerDelegate {
             self.model.hourly = result.hourly
             self.model.hourly.removeSubrange(25...self.model.hourly.count-1)
             
+            let gradient = GradientBackground()
+            let temperature = self.model.currentWeather?.temp
+
             // update UI
             DispatchQueue.main.async {
                 self.tableview.reloadData()
                 
                 self.tableview.tableHeaderView = self.createHeader()
                 
-                let gradient = GradientBackground()
-                gradient.setup(vc: self)
+                gradient.setup(vc: self, temperature: temperature)
             }
             
         }.resume()

@@ -28,6 +28,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableview.dataSource = self
     }
     
+//    override func viewDidAppear(_ animated: Bool) {
+//        let gradient = GradientBackground()
+//        gradient.setup(vc: self)
+//    }
+    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
