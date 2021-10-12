@@ -9,4 +9,4 @@ flip animations)
 * Cells with additional information will automatically revert to normal view.
 * Dynamic gradient background based on current temperature.
 
-<img src = "demo.gif" width = 350 >
+<img src = "demo.gif" width = 350 >  <img src = "gradient-demo.gif" width = 343 >
