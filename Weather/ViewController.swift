@@ -13,7 +13,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var model = Model()    
     let locationManager = CLLocationManager()
     var currentLocation: CLLocation?
-        
+    var noLocationView: UILabel?
+
     
     override func viewDidLoad() {
         super.viewDidLoad()

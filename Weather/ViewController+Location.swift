@@ -10,53 +10,31 @@ import UIKit
 import CoreLocation
 
 extension ViewController: CLLocationManagerDelegate {
-
+    
     func setup() {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-        
-        updateLocation()
-        
-        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { timer in
-            self.updateLocation()
-            print(timer.fireDate)
-        }
-//        locationManager.startUpdatingLocation()
-    }
-    
-    func updateLocation() {
+        locationManager.distanceFilter = 1000
         locationManager.startUpdatingLocation()
-        locationManager.stopUpdatingLocation()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("🌎")
-        print(locations)
         
         if !locations.isEmpty {
             currentLocation = locations.first
             weatherRequest()
+        }
+        
+        if let noLocationView = noLocationView {
+            noLocationView.removeFromSuperview()
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("⚠️")
         print(error.localizedDescription)
-    }
-    
-    func presentNoLocationAlert() {
-        let ac = UIAlertController(title: "No location found", message: "Check your internet connection or location access.", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        ac.addAction(UIAlertAction(title: "Try again", style: .default, handler: { [weak self]_ in
-            ac.dismiss(animated: true)
-            self?.setup()
-            
-            if self?.model.locationTitle == nil {
-                self?.presentNoLocationAlert()
-                
-            }
-        }))
-        present(ac, animated: true)
+        
+        presentNoLocationView()
     }
     
     func weatherRequest() {
@@ -76,6 +54,12 @@ extension ViewController: CLLocationManagerDelegate {
             var weatherResponse: WeatherResponse?
             do {
                 weatherResponse = try JSONDecoder().decode(WeatherResponse.self, from: data)
+                let formatter = DateFormatter()
+                formatter.timeStyle = .medium
+                let dateString = formatter.string(from: Date())
+
+                print("\(dateString) Decoding successful")
+                
             }
             catch {
                 print("error: \(error)")
@@ -89,6 +73,7 @@ extension ViewController: CLLocationManagerDelegate {
             
             if self.model.daily.isEmpty {
                 self.model.daily.append(contentsOf: entries)
+                self.locationManager.stopUpdatingLocation()
             }
             
             self.model.currentWeather = result.current
@@ -101,7 +86,6 @@ extension ViewController: CLLocationManagerDelegate {
             // update UI
             DispatchQueue.main.async {
                 self.tableview.reloadData()
-            
                 
                 self.tableview.tableHeaderView = self.createHeader()
                 
